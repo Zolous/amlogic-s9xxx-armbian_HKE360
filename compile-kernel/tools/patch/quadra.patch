@@ -1,0 +1,714 @@
+diff --git a/.gitignore b/.gitignore
+index f599d50..ee269b7 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -15,8 +15,8 @@ ubuntu-*-cloudimg-console.log
+ /.tmp/
+ /output/
+ /cache/
+-/*userpatches*/
+-/userpatches
++# /*userpatches*/
++# /userpatches
+ 
+ ### General annoyances ###
+ .DS_Store
+diff --git a/config/boards/inovato-quadra.csc b/config/boards/inovato-quadra.csc
+new file mode 100644
+index 0000000..adeacc8
+--- /dev/null
++++ b/config/boards/inovato-quadra.csc
+@@ -0,0 +1,12 @@
++# Inovato Quadra Allwinner H6, 2G DRAM, 16G Flash, 100mb Ethernet, WiFi 4
++BOARD_NAME="Inovato Quadra"
++BOARDFAMILY="sun50iw6"
++BOOTCONFIG="tanix_tx6_defconfig"
++KERNEL_TARGET="legacy,current"
++FULL_DESKTOP="yes"
++ATFBRANCH="tag:v2.2"
++BOOT_LOGO="desktop"
++BOOT_FDT_FILE="allwinner/sun50i-h6-tanix-tx6.dtb"
++SRC_EXTLINUX="yes"
++SRC_CMDLINE="console=ttyS0,115200 console=tty0 mem=2048M video=HDMI-A-1:1920x1080@60"
++OFFSET=16
+diff --git a/config/kernel/linux-sunxi64-current.config b/config/kernel/linux-sunxi64-current.config
+index aeefcc8..a53bb61 100644
+--- a/config/kernel/linux-sunxi64-current.config
++++ b/config/kernel/linux-sunxi64-current.config
+@@ -660,7 +660,7 @@ CONFIG_OLD_SIGSUSPEND3=y
+ CONFIG_COMPAT_OLD_SIGACTION=y
+ CONFIG_COMPAT_32BIT_TIME=y
+ CONFIG_HAVE_ARCH_VMAP_STACK=y
+-CONFIG_VMAP_STACK=y
++# CONFIG_VMAP_STACK is not set
+ CONFIG_HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET=y
+ CONFIG_RANDOMIZE_KSTACK_OFFSET=y
+ # CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT is not set
+@@ -2490,7 +2490,7 @@ CONFIG_FIXED_PHY=y
+ #
+ # MII PHY device drivers
+ #
+-CONFIG_AC200_PHY=m
++CONFIG_AC200_PHY=y
+ CONFIG_AMD_PHY=m
+ CONFIG_ADIN_PHY=m
+ CONFIG_ADIN1100_PHY=m
+@@ -2832,6 +2832,12 @@ CONFIG_VIRT_WIFI=m
+ # CONFIG_WAN is not set
+ CONFIG_IEEE802154_DRIVERS=m
+ 
++CONFIG_XRADIO=m
++CONFIG_XRADIO_NON_POWER_OF_TWO_BLOCKSIZES=y
++# CONFIG_XRADIO_5GHZ_SUPPORT is not set
++# CONFIG_XRADIO_WAPI_SUPPORT is not set
++CONFIG_XRADIO_USE_EXTENSIONS=y
++
+ #
+ # Wireless WAN
+ #
+@@ -3926,7 +3932,7 @@ CONFIG_MFD_SUN4I_GPADC=y
+ # CONFIG_MFD_BCM590XX is not set
+ CONFIG_MFD_BD9571MWV=m
+ CONFIG_MFD_AC100=y
+-# CONFIG_MFD_AC200 is not set
++CONFIG_MFD_AC200=y
+ CONFIG_MFD_AXP20X=y
+ CONFIG_MFD_AXP20X_I2C=y
+ CONFIG_MFD_AXP20X_RSB=y
+@@ -4098,7 +4104,7 @@ CONFIG_REGULATOR_PF8X00=m
+ # CONFIG_REGULATOR_PV88060 is not set
+ # CONFIG_REGULATOR_PV88080 is not set
+ # CONFIG_REGULATOR_PV88090 is not set
+-# CONFIG_REGULATOR_PWM is not set
++CONFIG_REGULATOR_PWM=y
+ CONFIG_REGULATOR_QCOM_SPMI=y
+ # CONFIG_REGULATOR_QCOM_USB_VBUS is not set
+ # CONFIG_REGULATOR_RASPBERRYPI_TOUCHSCREEN_ATTINY is not set
+diff --git a/config/kernel/linux-sunxi64-edge.config b/config/kernel/linux-sunxi64-edge.config
+index 62f65f1..bf1ecf8 100644
+--- a/config/kernel/linux-sunxi64-edge.config
++++ b/config/kernel/linux-sunxi64-edge.config
+@@ -661,7 +661,7 @@ CONFIG_OLD_SIGSUSPEND3=y
+ CONFIG_COMPAT_OLD_SIGACTION=y
+ CONFIG_COMPAT_32BIT_TIME=y
+ CONFIG_HAVE_ARCH_VMAP_STACK=y
+-CONFIG_VMAP_STACK=y
++# CONFIG_VMAP_STACK is not set
+ CONFIG_HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET=y
+ CONFIG_RANDOMIZE_KSTACK_OFFSET=y
+ # CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT is not set
+@@ -2499,7 +2499,7 @@ CONFIG_FIXED_PHY=y
+ #
+ # MII PHY device drivers
+ #
+-CONFIG_AC200_PHY=m
++CONFIG_AC200_PHY=y
+ CONFIG_AMD_PHY=m
+ CONFIG_ADIN_PHY=m
+ CONFIG_ADIN1100_PHY=m
+@@ -2845,6 +2845,13 @@ CONFIG_VIRT_WIFI=m
+ # CONFIG_WAN is not set
+ CONFIG_IEEE802154_DRIVERS=m
+ 
++CONFIG_WLAN_VENDOR_XRADIO=m
++CONFIG_XRADIO=m
++CONFIG_XRADIO_NON_POWER_OF_TWO_BLOCKSIZES=y
++# CONFIG_XRADIO_5GHZ_SUPPORT is not set
++# CONFIG_XRADIO_WAPI_SUPPORT is not set
++CONFIG_XRADIO_USE_EXTENSIONS=y
++
+ #
+ # Wireless WAN
+ #
+@@ -3946,7 +3953,7 @@ CONFIG_MFD_SUN4I_GPADC=y
+ # CONFIG_MFD_BCM590XX is not set
+ CONFIG_MFD_BD9571MWV=m
+ CONFIG_MFD_AC100=y
+-# CONFIG_MFD_AC200 is not set
++CONFIG_MFD_AC200=y
+ CONFIG_MFD_AXP20X=y
+ CONFIG_MFD_AXP20X_I2C=y
+ CONFIG_MFD_AXP20X_RSB=y
+@@ -4118,7 +4125,7 @@ CONFIG_REGULATOR_PF8X00=m
+ # CONFIG_REGULATOR_PV88060 is not set
+ # CONFIG_REGULATOR_PV88080 is not set
+ # CONFIG_REGULATOR_PV88090 is not set
+-# CONFIG_REGULATOR_PWM is not set
++CONFIG_REGULATOR_PWM=y
+ CONFIG_REGULATOR_QCOM_SPMI=y
+ # CONFIG_REGULATOR_QCOM_USB_VBUS is not set
+ # CONFIG_REGULATOR_RASPBERRYPI_TOUCHSCREEN_ATTINY is not set
+diff --git a/config/kernel/linux-sunxi64-legacy.config b/config/kernel/linux-sunxi64-legacy.config
+index 10fca17..986fdf9 100644
+--- a/config/kernel/linux-sunxi64-legacy.config
++++ b/config/kernel/linux-sunxi64-legacy.config
+@@ -671,7 +671,7 @@ CONFIG_OLD_SIGSUSPEND3=y
+ CONFIG_COMPAT_OLD_SIGACTION=y
+ CONFIG_COMPAT_32BIT_TIME=y
+ CONFIG_HAVE_ARCH_VMAP_STACK=y
+-CONFIG_VMAP_STACK=y
++# CONFIG_VMAP_STACK is not set
+ CONFIG_HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET=y
+ # CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT is not set
+ CONFIG_ARCH_HAS_STRICT_KERNEL_RWX=y
+@@ -2470,7 +2470,7 @@ CONFIG_FIXED_PHY=y
+ #
+ # MII PHY device drivers
+ #
+-CONFIG_AC200_PHY=m
++CONFIG_AC200_PHY=y
+ CONFIG_AMD_PHY=m
+ CONFIG_ADIN_PHY=m
+ CONFIG_AQUANTIA_PHY=m
+@@ -2741,6 +2741,7 @@ CONFIG_RTL8822CS=m
+ CONFIG_RTL8822BU=m
+ CONFIG_RTL8821CU=m
+ CONFIG_WLAN_VENDOR_XRADIO=m
++CONFIG_XRADIO=m
+ CONFIG_XRADIO_NON_POWER_OF_TWO_BLOCKSIZES=y
+ # CONFIG_XRADIO_5GHZ_SUPPORT is not set
+ # CONFIG_XRADIO_WAPI_SUPPORT is not set
+@@ -3997,7 +3998,7 @@ CONFIG_REGULATOR_PF8X00=m
+ # CONFIG_REGULATOR_PV88060 is not set
+ # CONFIG_REGULATOR_PV88080 is not set
+ # CONFIG_REGULATOR_PV88090 is not set
+-# CONFIG_REGULATOR_PWM is not set
++CONFIG_REGULATOR_PWM=y
+ CONFIG_REGULATOR_QCOM_SPMI=y
+ # CONFIG_REGULATOR_QCOM_USB_VBUS is not set
+ # CONFIG_REGULATOR_RASPBERRYPI_TOUCHSCREEN_ATTINY is not set
+diff --git a/lib/functions/compilation/patch/drivers_network.sh b/lib/functions/compilation/patch/drivers_network.sh
+index dc2a3ca..d660a26 100644
+--- a/lib/functions/compilation/patch/drivers_network.sh
++++ b/lib/functions/compilation/patch/drivers_network.sh
+@@ -192,41 +192,35 @@ driver_rtl8811_rtl8812_rtl8814_rtl8821() {
+ driver_xradio_xr819() {
+ 
+ 	# Wireless drivers for Xradio XR819 chipsets
+-	if linux-version compare "${version}" ge 4.19 && linux-version compare "${version}" le 5.19 &&
++	if linux-version compare "${version}" ge 4.19 && linux-version compare "${version}" le 6.6 &&
+ 		[[ "$LINUXFAMILY" == sunxi* ]] && [[ "$EXTRAWIFI" == yes ]]; then
+ 
+ 		display_alert "Adding" "Wireless drivers for Xradio XR819 chipsets" "info"
+ 
+-		fetch_from_repo "$GITHUB_SOURCE/dbeinder/xradio" "xradio" "branch:karabek_rebase" "yes"
++		local xradiover="commit:547521df27d1a80fb5542e93fa13bd09fb2259a2"
++                #local xradiover="commit:005f28cfe9e20b7f2dfd9d32d38ee97060dc707f"
++		fetch_from_repo "$GITHUB_SOURCE/fifteenhex/xradio" "xradio" "${xradiover}" "yes"
+ 		cd "$kerneldir" || exit
+ 		rm -rf "$kerneldir/drivers/net/wireless/xradio"
+ 		mkdir -p "$kerneldir/drivers/net/wireless/xradio/"
+-		cp "${SRC}"/cache/sources/xradio/karabek_rebase/*.{h,c} \
++		cp "${SRC}/cache/sources/xradio/${xradiover#*:}/"*.{h,c} \
+ 			"$kerneldir/drivers/net/wireless/xradio/"
+ 
+ 		# Makefile
+-		cp "${SRC}/cache/sources/xradio/karabek_rebase/Makefile" \
++		cp "${SRC}/cache/sources/xradio/${xradiover#*:}/Makefile" \
+ 			"$kerneldir/drivers/net/wireless/xradio/Makefile"
+ 
+ 		# Kconfig
+-		sed -i 's/---help---/help/g' "${SRC}/cache/sources/xradio/karabek_rebase/Kconfig"
+-		cp "${SRC}/cache/sources/xradio/karabek_rebase/Kconfig" \
++		sed -i 's/---help---/help/g' "${SRC}/cache/sources/xradio/${xradiover#*:}/Kconfig"
++		cp "${SRC}/cache/sources/xradio/${xradiover#*:}/Kconfig" \
+ 			"$kerneldir/drivers/net/wireless/xradio/Kconfig"
+ 
+ 		# Add to section Makefile
+-		echo "obj-\$(CONFIG_WLAN_VENDOR_XRADIO) += xradio/" \
++		echo "obj-\$(CONFIG_XRADIO) += xradio/" \
+ 			>> "$kerneldir/drivers/net/wireless/Makefile"
+ 		sed -i '/source "drivers\/net\/wireless\/ti\/Kconfig"/a source "drivers\/net\/wireless\/xradio\/Kconfig"' \
+ 			"$kerneldir/drivers/net/wireless/Kconfig"
+ 
+-		# add support for K5.13+
+-		process_patch_file "${SRC}/patch/misc/wireless-xradio-5.13.patch" "applying"
+-
+-		# add support for aarch64
+-		if [[ $ARCH == arm64 ]]; then
+-			process_patch_file "${SRC}/patch/misc/wireless-xradio-aarch64.patch" "applying"
+-		fi
+-
+ 	fi
+ 
+ }
+diff --git a/patch/kernel/archive/sunxi-5.15/patches.armbian/3-0020-arm64-dts-allwinner-h6-tanix-tx6-add-xr819.patch b/patch/kernel/archive/sunxi-5.15/patches.armbian/3-0020-arm64-dts-allwinner-h6-tanix-tx6-add-xr819.patch
+new file mode 100644
+index 0000000..811aac1
+--- /dev/null
++++ b/patch/kernel/archive/sunxi-5.15/patches.armbian/3-0020-arm64-dts-allwinner-h6-tanix-tx6-add-xr819.patch
+@@ -0,0 +1,56 @@
++--- a/arch/arm64/boot/dts/allwinner/sun50i-h6-tanix-tx6.dts
+++++ b/arch/arm64/boot/dts/allwinner/sun50i-h6-tanix-tx6.dts
++@@ -14,6 +14,7 @@
++ 
++ 	aliases {
++ 		ethernet0 = &emac;
+++		ethernet1 = &xr819;		
++ 		serial0 = &uart0;
++ 	};
++ 
++@@ -53,6 +54,14 @@
++ 		regulator-min-microvolt = <1135000>;
++ 		regulator-max-microvolt = <1135000>;
++ 	};
+++	
+++	wifi_pwrseq: wifi_pwrseq {
+++		compatible = "mmc-pwrseq-simple";
+++		clocks = <&rtc 1>;
+++		clock-names = "ext_clock";
+++		reset-gpios = <&r_pio 1 3 GPIO_ACTIVE_LOW>; /* PM3 */
+++		post-power-on-delay-ms = <200>;
+++	};	
++ };
++ 
++ &ac200_pwm_clk {
++@@ -122,6 +131,30 @@
++ 	status = "okay";
++ };
++ 
+++&mmc1 {
+++	pinctrl-names = "default";
+++	pinctrl-0 = <&mmc1_pins>;
+++	vmmc-supply = <&reg_vcc3v3>;
+++	vqmmc-supply = <&reg_vcc1v8>;
+++	mmc-pwrseq = <&wifi_pwrseq>;
+++	bus-width = <4>;
+++	non-removable;
+++	status = "okay";
+++
+++       /*
+++         * Explicitly define the sdio device, so that we can add an ethernet
+++         * alias for it (which e.g. makes u-boot set a mac-address).
+++         */
+++        xr819: sdio_wifi@1 {
+++                reg = <1>;
+++		compatible = "xradio,xr819";
+++		interrupt-parent = <&r_pio>;
+++                local-mac-address = [dc 44 6d c0 ff ee];
+++		interrupts = <1 0 IRQ_TYPE_EDGE_RISING>;	/* PM0 */
+++		interrupt-names = "host-wake";
+++        };
+++};
+++
++ &mmc2 {
++ 	vmmc-supply = <&reg_vcc3v3>;
++ 	vqmmc-supply = <&reg_vcc1v8>;
+diff --git a/patch/kernel/archive/sunxi-5.15/series.conf b/patch/kernel/archive/sunxi-5.15/series.conf
+index 3495233..097a717 100644
+--- a/patch/kernel/archive/sunxi-5.15/series.conf
++++ b/patch/kernel/archive/sunxi-5.15/series.conf
+@@ -661,9 +661,10 @@
+ 	patches.armbian/0003-add-dump_reg-and-sunxi-sysinfo-drivers.patch
+ 	patches.armbian/0004-add-sunxi-addr-driver-used-to-fix-uwe5622-bluetooth-.patch
+ 	patches.armbian/0005-net-phy-support-yt8531c.patch
+-	patches.armbian/0009-allwinner-h6-support-ac200-audio-codec.patch
++	patches.armbian/3-0020-arm64-dts-allwinner-h6-tanix-tx6-add-xr819.patch
++#	patches.armbian/0009-allwinner-h6-support-ac200-audio-codec.patch
+ 	patches.armbian/0010-allwinner-add-sunxi_get_soc_chipid-and-sunxi_get_ser.patch
+-	patches.armbian/0011-add-initial-support-for-orangepi3-lts.patch
++#	patches.armbian/0011-add-initial-support-for-orangepi3-lts.patch
+ 	patches.armbian/0012-fix-h6-emmc.patch
+ 	patches.armbian/0013-x-fix-h6-emmc-dts.patch
+ 	patches.armbian/0014-add-uwe-bsp-to-orangepi3-lts-dts-file.patch
+diff --git a/patch/kernel/archive/sunxi-6.1/patches.armbian/0001-add-ac200-ethernet-and-xr819.patch b/patch/kernel/archive/sunxi-6.1/patches.armbian/0001-add-ac200-ethernet-and-xr819.patch
+new file mode 100644
+index 0000000..48fcd29
+--- /dev/null
++++ b/patch/kernel/archive/sunxi-6.1/patches.armbian/0001-add-ac200-ethernet-and-xr819.patch
+@@ -0,0 +1,121 @@
++diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6-tanix.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-h6-tanix.dtsi
++index edb71e4a0304..f8614e2b297c 100644
++--- a/arch/arm64/boot/dts/allwinner/sun50i-h6-tanix.dtsi
+++++ b/arch/arm64/boot/dts/allwinner/sun50i-h6-tanix.dtsi
++@@ -10,6 +10,8 @@
++ 
++ / {
++ 	aliases {
+++		ethernet0 = &emac;
+++		ethernet1 = &xr819;
++ 		serial0 = &uart0;
++ 	};
++ 
++@@ -81,6 +83,7 @@ wifi_pwrseq: wifi-pwrseq {
++ 		clocks = <&rtc 1>;
++ 		clock-names = "ext_clock";
++ 		reset-gpios = <&r_pio 1 3 GPIO_ACTIVE_LOW>; /* PM3 */
+++		post-power-on-delay-ms = <200>;
++ 	};
++ };
++ 
++@@ -88,6 +91,14 @@ &cpu0 {
++ 	cpu-supply = <&reg_vdd_cpu_gpu>;
++ };
++ 
+++&ac200_ephy {
+++	status = "okay";
+++};
+++
+++&ac200_pwm_clk {
+++	status = "okay";
+++};
+++
++ &de {
++ 	status = "okay";
++ };
++@@ -96,6 +107,15 @@ &dwc3 {
++ 	status = "okay";
++ };
++ 
+++&emac {
+++	pinctrl-names = "default";
+++	pinctrl-0 = <&ext_rmii_pins>;
+++	phy-mode = "rmii";
+++	phy-handle = <&ext_rmii_phy>;
+++	status = "okay";
+++};
+++	
+++
++ &ehci0 {
++ 	status = "okay";
++ };
++@@ -119,6 +139,21 @@ hdmi_out_con: endpoint {
++ 	};
++ };
++ 
+++&i2s1 {
+++	status = "okay";
+++};
+++
+++&i2c3 {
+++	status = "okay";
+++};
+++
+++&mdio {
+++	ext_rmii_phy: ethernet-phy@1 {
+++		compatible = "ethernet-phy-ieee802.3-c22";
+++		reg = <1>;
+++	};
+++};
+++
++ &mmc0 {
++ 	pinctrl-names = "default";
++ 	pinctrl-0 = <&mmc0_pins>;
++@@ -129,12 +164,27 @@ &mmc0 {
++ };
++ 
++ &mmc1 {
+++        pinctrl-names = "default";
+++        pinctrl-0 = <&mmc1_pins>;
++ 	vmmc-supply = <&reg_vcc3v3>;
++ 	vqmmc-supply = <&reg_vcc1v8>;
++ 	mmc-pwrseq = <&wifi_pwrseq>;
++ 	bus-width = <4>;
++ 	non-removable;
++ 	status = "okay";
+++
+++        /*
+++          * Explicitly define the sdio device, so that we can add an ethernet
+++          * alias for it (which e.g. makes u-boot set a mac-address).
+++          */
+++         xr819: sdio_wifi@1 {
+++                 reg = <1>;
+++                compatible = "xradio,xr819";
+++                interrupt-parent = <&r_pio>;
+++                 local-mac-address = [dc 44 6d c0 ff ee];
+++                interrupts = <1 0 IRQ_TYPE_EDGE_RISING>;        /* PM0 */
+++                interrupt-names = "host-wake";
+++         };
++ };
++ 
++ &mmc2 {
++@@ -161,10 +211,18 @@ &pio {
++ 	vcc-pg-supply = <&reg_vcc1v8>;
++ };
++ 
+++&pwm {
+++	status = "okay";
+++};
+++
++ &r_ir {
++ 	status = "okay";
++ };
++ 
+++&sound_hdmi {
+++	status = "okay";
+++};
+++
++ &spdif {
++ 	status = "okay";
++ };
+diff --git a/patch/kernel/archive/sunxi-6.1/patches.armbian/mfd-sunxi-ac200-fix-error-initialization.patch b/patch/kernel/archive/sunxi-6.1/patches.armbian/mfd-sunxi-ac200-fix-error-initialization.patch
+index bb12c77..4a5b1a0 100644
+--- a/patch/kernel/archive/sunxi-6.1/patches.armbian/mfd-sunxi-ac200-fix-error-initialization.patch
++++ b/patch/kernel/archive/sunxi-6.1/patches.armbian/mfd-sunxi-ac200-fix-error-initialization.patch
+@@ -1,16 +1,16 @@
+ From eab277e9ca1f5558dbbf9820dbf6cf4edf4d4c39 Mon Sep 17 00:00:00 2001
+ From: The-going <48602507+The-going@users.noreply.github.com>
+ Date: Tue, 28 Feb 2023 13:39:51 +0300
+-Subject: [PATCH] mfd: sunxi-ac200: fix error initialization
++Subject: [PATCH] mfd: ac200: fix error initialization
+ 
+ ---
+  drivers/mfd/sunxi-ac200.c | 4 +---
+  1 file changed, 1 insertion(+), 3 deletions(-)
+ 
+-diff --git a/drivers/mfd/sunxi-ac200.c b/drivers/mfd/sunxi-ac200.c
++diff --git a/drivers/mfd/ac200.c b/drivers/mfd/ac200.c
+ index 368a54587..b784a82f3 100644
+---- a/drivers/mfd/sunxi-ac200.c
+-+++ b/drivers/mfd/sunxi-ac200.c
++--- a/drivers/mfd/ac200.c
+++++ b/drivers/mfd/ac200.c
+ @@ -144,7 +144,7 @@ static int ac200_i2c_probe(struct i2c_client *i2c,
+  	return 0;
+  }
+diff --git a/patch/kernel/archive/sunxi-6.1/series.conf b/patch/kernel/archive/sunxi-6.1/series.conf
+index bffa9c9..895c542 100644
+--- a/patch/kernel/archive/sunxi-6.1/series.conf
++++ b/patch/kernel/archive/sunxi-6.1/series.conf
+@@ -561,9 +561,10 @@
+ 	patches.armbian/Add-dump_reg-and-sunxi-sysinfo-drivers.patch
+ 	patches.armbian/Add-sunxi-addr-driver-Used-to-fix-uwe5622-bluetooth-MAC-address.patch
+ 	patches.armbian/net-phy-Support-yt8531c.patch
+-	patches.armbian/allwinner-h6-Support-ac200-audio-codec.patch
++	patches.armbian/0001-add-ac200-ethernet-and-xr819.patch
++#	patches.armbian/allwinner-h6-Support-ac200-audio-codec.patch
+ 	patches.armbian/nvmem-sunxi_sid-add-sunxi_get_soc_chipid-sunxi_get_serial.patch
+-	patches.armbian/add-initial-support-for-orangepi3-lts.patch
++#	patches.armbian/add-initial-support-for-orangepi3-lts.patch
+ 	patches.armbian/mmc-host-sunxi-mmc-Fix-H6-emmc.patch
+ 	patches.armbian/arm64-dts-allwinner-sun50i-h6-Fix-H6-emmc.patch
+ 	patches.armbian/Rollback-r_rsb-to-r_i2c.patch
+diff --git a/patch/kernel/archive/sunxi-6.2/patches.armbian/0001-add-ac200-ethernet-and-xr819.patch b/patch/kernel/archive/sunxi-6.2/patches.armbian/0001-add-ac200-ethernet-and-xr819.patch
+new file mode 100644
+index 0000000..48fcd29
+--- /dev/null
++++ b/patch/kernel/archive/sunxi-6.2/patches.armbian/0001-add-ac200-ethernet-and-xr819.patch
+@@ -0,0 +1,121 @@
++diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6-tanix.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-h6-tanix.dtsi
++index edb71e4a0304..f8614e2b297c 100644
++--- a/arch/arm64/boot/dts/allwinner/sun50i-h6-tanix.dtsi
+++++ b/arch/arm64/boot/dts/allwinner/sun50i-h6-tanix.dtsi
++@@ -10,6 +10,8 @@
++ 
++ / {
++ 	aliases {
+++		ethernet0 = &emac;
+++		ethernet1 = &xr819;
++ 		serial0 = &uart0;
++ 	};
++ 
++@@ -81,6 +83,7 @@ wifi_pwrseq: wifi-pwrseq {
++ 		clocks = <&rtc 1>;
++ 		clock-names = "ext_clock";
++ 		reset-gpios = <&r_pio 1 3 GPIO_ACTIVE_LOW>; /* PM3 */
+++		post-power-on-delay-ms = <200>;
++ 	};
++ };
++ 
++@@ -88,6 +91,14 @@ &cpu0 {
++ 	cpu-supply = <&reg_vdd_cpu_gpu>;
++ };
++ 
+++&ac200_ephy {
+++	status = "okay";
+++};
+++
+++&ac200_pwm_clk {
+++	status = "okay";
+++};
+++
++ &de {
++ 	status = "okay";
++ };
++@@ -96,6 +107,15 @@ &dwc3 {
++ 	status = "okay";
++ };
++ 
+++&emac {
+++	pinctrl-names = "default";
+++	pinctrl-0 = <&ext_rmii_pins>;
+++	phy-mode = "rmii";
+++	phy-handle = <&ext_rmii_phy>;
+++	status = "okay";
+++};
+++	
+++
++ &ehci0 {
++ 	status = "okay";
++ };
++@@ -119,6 +139,21 @@ hdmi_out_con: endpoint {
++ 	};
++ };
++ 
+++&i2s1 {
+++	status = "okay";
+++};
+++
+++&i2c3 {
+++	status = "okay";
+++};
+++
+++&mdio {
+++	ext_rmii_phy: ethernet-phy@1 {
+++		compatible = "ethernet-phy-ieee802.3-c22";
+++		reg = <1>;
+++	};
+++};
+++
++ &mmc0 {
++ 	pinctrl-names = "default";
++ 	pinctrl-0 = <&mmc0_pins>;
++@@ -129,12 +164,27 @@ &mmc0 {
++ };
++ 
++ &mmc1 {
+++        pinctrl-names = "default";
+++        pinctrl-0 = <&mmc1_pins>;
++ 	vmmc-supply = <&reg_vcc3v3>;
++ 	vqmmc-supply = <&reg_vcc1v8>;
++ 	mmc-pwrseq = <&wifi_pwrseq>;
++ 	bus-width = <4>;
++ 	non-removable;
++ 	status = "okay";
+++
+++        /*
+++          * Explicitly define the sdio device, so that we can add an ethernet
+++          * alias for it (which e.g. makes u-boot set a mac-address).
+++          */
+++         xr819: sdio_wifi@1 {
+++                 reg = <1>;
+++                compatible = "xradio,xr819";
+++                interrupt-parent = <&r_pio>;
+++                 local-mac-address = [dc 44 6d c0 ff ee];
+++                interrupts = <1 0 IRQ_TYPE_EDGE_RISING>;        /* PM0 */
+++                interrupt-names = "host-wake";
+++         };
++ };
++ 
++ &mmc2 {
++@@ -161,10 +211,18 @@ &pio {
++ 	vcc-pg-supply = <&reg_vcc1v8>;
++ };
++ 
+++&pwm {
+++	status = "okay";
+++};
+++
++ &r_ir {
++ 	status = "okay";
++ };
++ 
+++&sound_hdmi {
+++	status = "okay";
+++};
+++
++ &spdif {
++ 	status = "okay";
++ };
+diff --git a/patch/kernel/archive/sunxi-6.2/patches.armbian/mfd-sunxi-ac200-fix-error-initialization.patch b/patch/kernel/archive/sunxi-6.2/patches.armbian/mfd-sunxi-ac200-fix-error-initialization.patch
+index 8130ce9..e70ec47 100644
+--- a/patch/kernel/archive/sunxi-6.2/patches.armbian/mfd-sunxi-ac200-fix-error-initialization.patch
++++ b/patch/kernel/archive/sunxi-6.2/patches.armbian/mfd-sunxi-ac200-fix-error-initialization.patch
+@@ -1,16 +1,16 @@
+ From eab277e9ca1f5558dbbf9820dbf6cf4edf4d4c39 Mon Sep 17 00:00:00 2001
+ From: The-going <48602507+The-going@users.noreply.github.com>
+ Date: Tue, 28 Feb 2023 13:39:51 +0300
+-Subject: [PATCH 153/153] mfd: sunxi-ac200: fix error initialization
++Subject: [PATCH 153/153] mfd: ac200: fix error initialization
+ 
+ ---
+  drivers/mfd/sunxi-ac200.c | 4 +---
+  1 file changed, 1 insertion(+), 3 deletions(-)
+ 
+-diff --git a/drivers/mfd/sunxi-ac200.c b/drivers/mfd/sunxi-ac200.c
++diff --git a/drivers/mfd/ac200.c b/drivers/mfd/ac200.c
+ index 368a54587..b784a82f3 100644
+---- a/drivers/mfd/sunxi-ac200.c
+-+++ b/drivers/mfd/sunxi-ac200.c
++--- a/drivers/mfd/ac200.c
+++++ b/drivers/mfd/ac200.c
+ @@ -144,7 +144,7 @@ static int ac200_i2c_probe(struct i2c_client *i2c,
+  	return 0;
+  }
+diff --git a/patch/kernel/archive/sunxi-6.2/series.conf b/patch/kernel/archive/sunxi-6.2/series.conf
+index d41d0bb..52259f0 100644
+--- a/patch/kernel/archive/sunxi-6.2/series.conf
++++ b/patch/kernel/archive/sunxi-6.2/series.conf
+@@ -570,9 +570,10 @@
+ #### Needs to be redone
+ -	patches.armbian/net-phy-Support-yt8531c.patch
+ ####
+-	patches.armbian/allwinner-h6-Support-ac200-audio-codec.patch
++	patches.armbian/0001-add-ac200-ethernet-and-xr819.patch
++#	patches.armbian/allwinner-h6-Support-ac200-audio-codec.patch
+ 	patches.armbian/nvmem-sunxi_sid-add-sunxi_get_soc_chipid-sunxi_get_serial.patch
+-	patches.armbian/add-initial-support-for-orangepi3-lts.patch
++#	patches.armbian/add-initial-support-for-orangepi3-lts.patch
+ 	patches.armbian/mmc-host-sunxi-mmc-Fix-H6-emmc.patch
+ 	patches.armbian/arm64-dts-allwinner-sun50i-h6-Fix-H6-emmc.patch
+ 	patches.armbian/Rollback-r_rsb-to-r_i2c.patch
+diff --git a/userpatches/customize-image.sh b/userpatches/customize-image.sh
+new file mode 100644
+index 0000000..c287f6b
+--- /dev/null
++++ b/userpatches/customize-image.sh
+@@ -0,0 +1,32 @@
++#!/bin/bash
++
++# arguments: $RELEASE $LINUXFAMILY $BOARD $BUILD_DESKTOP
++#
++# This is the image customization script
++
++# NOTE: It is copied to /tmp directory inside the image
++# and executed there inside chroot environment
++# so don't reference any files that are not already installed
++
++# NOTE: If you want to transfer files between chroot and host
++# userpatches/overlay directory on host is bind-mounted to /tmp/overlay in chroot
++# The sd card's root path is accessible via $SDCARD variable.
++
++RELEASE=$1
++LINUXFAMILY=$2
++BOARD=$3
++BUILD_DESKTOP=$4
++
++Main() {
++	 wget https://www.inovato.net/Armbian/armbian-to-quadra-lite.zip
++         unzip -o armbian-to-quadra-lite.zip
++         chmod +x /usr/sbin/flash-quadra
++         chmod +x /usr/bin/redon
++         chmod +x /usr/bin/blueon
++         chmod +x /usr/bin/gpio
++         chmod +x /usr/share/lightdm/lightdmxrandr.py
++         rm armbian-to-quadra-lite.zip
++         systemctl enable flash-quadra
++} # Main
++
++Main "$@"
+--- /patch/kernel/archive/sunxi-6.1/series.conf.orig	2023-07-18 11:13:45.261727985 -0700
++++ /patch/kernel/archive/sunxi-6.1/series.conf	2023-07-18 11:14:17.401726059 -0700
+@@ -573,7 +573,7 @@
+ #	patches.armbian/add-initial-support-for-orangepi3-lts.patch
+ 	patches.armbian/mmc-host-sunxi-mmc-Fix-H6-emmc.patch
+ 	patches.armbian/arm64-dts-allwinner-sun50i-h6-Fix-H6-emmc.patch
+-	patches.armbian/Rollback-r_rsb-to-r_i2c.patch
++#	patches.armbian/Rollback-r_rsb-to-r_i2c.patch
+ 	patches.armbian/arm64-dts-sun50i-h5-nanopi-r1s-h5-add-rtl8153-support.patch
+ 	patches.armbian/net-usb-r8152-add-LED-configuration-from-OF.patch
+ 	patches.armbian/arm64-dts-sun50i-h6-orangepi.dtsi-Rollback-r_rsb-to-r_i2c.patch
+--- /patch/kernel/archive/sunxi-5.15/series.conf.orig	2023-07-18 11:23:20.251686259 -0700
++++ /patch/kernel/archive/sunxi-5.15/series.conf	2023-07-18 11:56:44.641550242 -0700
+@@ -647,9 +647,9 @@
+ #	patches.armbian/0011-add-initial-support-for-orangepi3-lts.patch
+ 	patches.armbian/0012-fix-h6-emmc.patch
+ 	patches.armbian/0013-x-fix-h6-emmc-dts.patch
+-	patches.armbian/0014-add-uwe-bsp-to-orangepi3-lts-dts-file.patch
++#	patches.armbian/0014-add-uwe-bsp-to-orangepi3-lts-dts-file.patch
+ 	patches.armbian/arm64-dts-sun50i-h5-nanopi-r1s-h5-add-rtl8153-suppor.patch
+-	patches.armbian/999-rollback-rsb.patch
++#	patches.armbian/999-rollback-rsb.patch
+ 	patches.armbian/net-usb-r8152-add-LED-configuration-from-OF.patch
+ 	patches.armbian/Orangepi_one_plus_Rollback-r_rsb-to-r_i2c.patch
+ 	patches.armbian/sound-soc-sun4i-codec-add-compatible-sun8i_r40_codec.patch
