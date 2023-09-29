@@ -97,9 +97,12 @@ jobs:
           kernel_source: ${{ inputs.kernel_source }}
           kernel_version: ${{ inputs.kernel_version }}
           kernel_auto: ${{ inputs.kernel_auto }}
+          kernel_patch: compile-kernel/tools/patch
+          auto_patch: true
           kernel_package: ${{ inputs.kernel_package }}
           kernel_sign: ${{ inputs.kernel_sign }}
           kernel_toolchain: ${{ inputs.kernel_toolchain }}
+          
 
       - name: Upload Kernel to Release
         uses: ncipollo/release-action@main
